@@ -1,6 +1,6 @@
 {
   "name": "buildworks-ai-decision-mcp",
-  "version": "1.0.1",
+  "version": "2.0.3",
   "description": "Decision MCP by BuildWorks.AI — sequential thinking, decision-making, and analysis server for MCP-compatible IDEs.",
   "main": "dist/server.js",
   "type": "module",
