@@ -1,7 +1,7 @@
 {
   "name": "buildworks-ai-decision-mcp",
   "version": "1.0.0",
-  "description": "BuildWorks.AI Decision MCP Tools — sequential thinking, decision-making, and analysis server for MCP-compatible IDEs.",
+  "description": "Decision MCP by BuildWorks.AI — sequential thinking, decision-making, and analysis server for MCP-compatible IDEs.",
   "main": "dist/server.js",
   "type": "module",
   "bin": {
@@ -35,8 +35,12 @@
     "windsurf",
     "claude"
   ],
-  "author": "BuildWorks.AI <contact@buildworks.ai>",
+  "author": "BuildWorks.AI <contact@buildworks.ai> (https://buildworks.ai)",
   "license": "MIT",
+  "funding": {
+    "type": "website",
+    "url": "https://buildworks.ai"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/buildworksai/decision-mcp.git"

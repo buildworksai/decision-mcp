@@ -19,7 +19,7 @@ class DecisionMCPServer {
   constructor() {
     this.server = new Server(
       {
-        name: 'buildworks-ai-decision-mcp',
+        name: 'Decision MCP by BuildWorks.AI',
         version: '1.0.0',
       }
     );
@@ -737,7 +737,7 @@ class DecisionMCPServer {
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('BuildWorks.AI Decision MCP Server running on stdio');
+    console.error('Decision MCP by BuildWorks.AI — running on stdio');
   }
 }
 

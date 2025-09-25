@@ -1,6 +1,6 @@
-# BuildWorks.AI Decision MCP Tools
+# Decision MCP by BuildWorks.AI
 
-Production-grade Model Context Protocol (MCP) server providing sequential thinking, structured decision making, and decision analysis (bias, logic, risk). Works with Cursor, Windsurf, and Claude via stdio. Distributed via npm and Docker.
+Decision MCP by BuildWorks.AI is a production-grade Model Context Protocol (MCP) server providing sequential thinking, structured decision making, and decision analysis (bias, logic, risk). Works with Cursor, Windsurf, and Claude via stdio. Distributed via npm and Docker. Built and maintained by [BuildWorks.AI](https://buildworks.ai).
 
 ## Features
 
@@ -81,6 +81,9 @@ Add to your MCP settings:
   "mcpServers": {
     "decision-mcp": {
       "command": "decision-mcp"
+      "args": [],
+      "env": {},
+      "disabled": false
     }
   }
 }
@@ -94,6 +97,10 @@ Add to your MCP settings:
 ## License
 
 Licensed under the MIT License. See [LICENSE](./LICENSE).
+
+---
+
+Maintained by [BuildWorks.AI](https://buildworks.ai)
 
 ### Available Tools
 
