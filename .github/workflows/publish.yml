@@ -44,7 +44,7 @@ jobs:
           '
           echo "@buildworksai:registry=https://npm.pkg.github.com" >> ~/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
-          npm config set always-auth true
+          echo "always-auth=true" >> ~/.npmrc
 
       - name: Setup Node.js for GitHub Packages
         uses: actions/setup-node@v4
