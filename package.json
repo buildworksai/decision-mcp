@@ -1,9 +1,12 @@
 {
-  "name": "decision-mcp",
+  "name": "buildworks-ai-decision-mcp",
   "version": "1.0.0",
-  "description": "MCP tools for sequential thinking and decision making",
+  "description": "BuildWorks.AI Decision MCP Tools — sequential thinking, decision-making, and analysis server for MCP-compatible IDEs.",
   "main": "dist/server.js",
   "type": "module",
+  "bin": {
+    "decision-mcp": "dist/server.js"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
@@ -16,9 +19,32 @@
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "setup": "./scripts/setup.sh"
   },
-  "keywords": ["mcp", "decision-making", "sequential-thinking", "tools"],
-  "author": "Your Name",
+  "files": [
+    "dist/",
+    "README.md",
+    "examples/",
+    "SETUP.md"
+  ],
+  "keywords": [
+    "buildworks-ai",
+    "mcp",
+    "decision-making",
+    "sequential-thinking",
+    "ai-tools",
+    "cursor",
+    "windsurf",
+    "claude"
+  ],
+  "author": "BuildWorks.AI <contact@buildworks.ai>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buildworksai/decision-mcp.git"
+  },
+  "homepage": "https://github.com/buildworksai/decision-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/buildworksai/decision-mcp/issues"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.4.0",
     "uuid": "^9.0.1",

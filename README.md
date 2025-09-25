@@ -1,6 +1,6 @@
-# Decision MCP - Sequential Thinking and Decision Making Tools
+# BuildWorks.AI Decision MCP Tools
 
-A comprehensive Model Context Protocol (MCP) server that provides tools for sequential thinking, structured decision making, and decision analysis. This server enables AI assistants to guide users through complex problem-solving and decision-making processes.
+Production-grade Model Context Protocol (MCP) server providing sequential thinking, structured decision making, and decision analysis (bias, logic, risk). Works with Cursor, Windsurf, and Claude via stdio. Distributed via npm and Docker.
 
 ## Features
 
@@ -52,7 +52,7 @@ npm start
 The server runs on stdio and can be integrated with MCP-compatible AI assistants:
 
 ```bash
-node dist/server.js
+decision-mcp
 ```
 
 ### Available Tools
