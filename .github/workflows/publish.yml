@@ -44,12 +44,20 @@ jobs:
           '
           echo "@buildworksai:registry=https://npm.pkg.github.com" >> ~/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
+          npm config set always-auth true
+
+      - name: Setup Node.js for GitHub Packages
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com
+          scope: '@buildworksai'
 
       - name: Publish to GitHub Packages (scoped)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm publish --registry=https://npm.pkg.github.com
+        run: npm publish
 
       - name: Restore package.json
         run: mv -f package.npm.json package.json
