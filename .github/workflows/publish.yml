@@ -53,6 +53,14 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@buildworksai'
 
+      - name: Verify GitHub Packages auth and registry
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm config get registry || true
+          npm whoami --registry=https://npm.pkg.github.com || true
+          npm ping --registry=https://npm.pkg.github.com || true
+
       - name: Publish to GitHub Packages (scoped)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
