@@ -42,11 +42,14 @@ jobs:
             pkg.publishConfig = { registry: "https://npm.pkg.github.com" };
             fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
           '
+          echo "@buildworksai:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
 
       - name: Publish to GitHub Packages (scoped)
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm publish
+        run: npm publish --registry=https://npm.pkg.github.com
 
       - name: Restore package.json
         run: mv -f package.npm.json package.json
