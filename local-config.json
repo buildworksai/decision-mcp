@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "decision-mcp": {
+      "command": "node",
+      "args": ["/Users/raghunathchava/Code/decision-mcp/dist/server.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}

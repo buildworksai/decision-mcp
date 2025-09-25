@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  decision-mcp-dev:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: decision-mcp-dev
+    volumes:
+      # Mount source code for development
+      - ./src:/app/src
+      - ./dist:/app/dist
+      # Mount node_modules for faster rebuilds
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    stdin_open: true
+    tty: true
+    command: ["npm", "run", "dev"]
+
+  # Optional: Add a development database
+  redis:
+    image: redis:7-alpine
+    container_name: decision-mcp-redis
+    ports:
+      - "6379:6379"
+    profiles:
+      - database

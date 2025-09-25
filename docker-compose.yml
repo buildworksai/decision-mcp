@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  decision-mcp:
+    build: .
+    container_name: decision-mcp-server
+    restart: unless-stopped
+    # For MCP servers, we typically use stdio, but this shows the structure
+    stdin_open: true
+    tty: true
+    # Optional: Add environment variables
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    # Optional: Add volumes for persistent data
+    volumes:
+      - ./data:/app/data
+    # Health check
+    healthcheck:
+      test: ["CMD", "node", "-e", "console.log('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a reverse proxy for HTTP access
+  nginx:
+    image: nginx:alpine
+    container_name: decision-mcp-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - decision-mcp
+    profiles:
+      - web

@@ -1,0 +1,28 @@
+# Development Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Build the project
+RUN npm run build
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S mcp -u 1001
+RUN chown -R mcp:nodejs /app
+USER mcp
+
+# Expose port for development
+EXPOSE 3000
+
+# Default command for development
+CMD ["npm", "run", "dev"]

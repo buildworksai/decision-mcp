@@ -1,0 +1,47 @@
+# Dependencies
+node_modules
+npm-debug.log*
+
+# Source files (we only need dist)
+src
+*.ts
+tsconfig.json
+
+# Development files
+.git
+.gitignore
+.eslintrc.json
+.vscode
+.idea
+
+# Documentation
+README.md
+examples
+*.md
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Environment files
+.env
+.env.*
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage
+.nyc_output
+
+# Temporary folders
+tmp
+temp

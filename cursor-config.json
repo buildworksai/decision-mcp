@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "decision-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--name",
+        "decision-mcp-cursor",
+        "decision-mcp:latest"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
