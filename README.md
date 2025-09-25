@@ -60,6 +60,19 @@ The server runs on stdio and can be integrated with MCP-compatible AI assistants
 decision-mcp
 ```
 
+### Install from GitHub Packages (private/org registry)
+
+1) Create `~/.npmrc` with:
+```ini
+@buildworksai:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
+```
+
+2) Install the scoped package:
+```bash
+npm install -g @buildworksai/decision-mcp
+```
+
 ## Configure in IDE (Cursor/Windsurf/Claude)
 
 Add to your MCP settings:
