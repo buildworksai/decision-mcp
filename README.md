@@ -24,7 +24,12 @@ Production-grade Model Context Protocol (MCP) server providing sequential thinki
 
 ## Installation
 
-1. Clone the repository:
+1. Install via npm (recommended):
+```bash
+npm install -g buildworks-ai-decision-mcp
+```
+
+Or clone the repository:
 ```bash
 git clone <repository-url>
 cd decision-mcp
@@ -54,6 +59,28 @@ The server runs on stdio and can be integrated with MCP-compatible AI assistants
 ```bash
 decision-mcp
 ```
+
+## Configure in IDE (Cursor/Windsurf/Claude)
+
+Add to your MCP settings:
+```json
+{
+  "mcpServers": {
+    "decision-mcp": {
+      "command": "decision-mcp"
+    }
+  }
+}
+```
+
+## Contributing and Conduct
+
+- See [CONTRIBUTING.md](./CONTRIBUTING.md)
+- See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
+
+## License
+
+Licensed under the MIT License. See [LICENSE](./LICENSE).
 
 ### Available Tools
 
