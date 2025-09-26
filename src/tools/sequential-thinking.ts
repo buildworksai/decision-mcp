@@ -72,9 +72,29 @@ export class SequentialThinkingTool {
   /**
    * Add a thought to an existing session
    */
-  public addThought(params: AddThoughtParams): ToolResponse<Thought> {
+  public async addThought(params: AddThoughtParams): Promise<ToolResponse<Thought>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      // Load session from database if not in memory
+      let session = this.sessions.get(params.sessionId);
+      if (!session) {
+        const cachedSession = sessionCache.get(params.sessionId);
+        if (cachedSession) {
+          session = cachedSession as ThinkingSession;
+          this.sessions.set(params.sessionId, session);
+        }
+      }
+      
+      // If not in memory or cache, try to load from database
+      if (!session) {
+        const loadedSession = await this.loadSessionFromDatabase(params.sessionId);
+        if (loadedSession) {
+          session = loadedSession;
+          this.sessions.set(params.sessionId, session);
+          // Cache the loaded session
+          sessionCache.set(params.sessionId, session);
+        }
+      }
+      
       if (!session) {
         return {
           success: false,
@@ -108,6 +128,9 @@ export class SequentialThinkingTool {
       session.updatedAt = now;
 
       this.sessions.set(params.sessionId, session);
+      
+      // Save to database
+      await this.saveSessionToDatabase(session);
 
       return {
         success: true,
@@ -267,9 +290,29 @@ export class SequentialThinkingTool {
   /**
    * Analyze progress of a thinking session
    */
-  public analyzeProgress(params: AnalyzeProgressParams): ToolResponse<ProgressAnalysis> {
+  public async analyzeProgress(params: AnalyzeProgressParams): Promise<ToolResponse<ProgressAnalysis>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      // Load session from database if not in memory
+      let session = this.sessions.get(params.sessionId);
+      if (!session) {
+        const cachedSession = sessionCache.get(params.sessionId);
+        if (cachedSession) {
+          session = cachedSession as ThinkingSession;
+          this.sessions.set(params.sessionId, session);
+        }
+      }
+      
+      // If not in memory or cache, try to load from database
+      if (!session) {
+        const loadedSession = await this.loadSessionFromDatabase(params.sessionId);
+        if (loadedSession) {
+          session = loadedSession;
+          this.sessions.set(params.sessionId, session);
+          // Cache the loaded session
+          sessionCache.set(params.sessionId, session);
+        }
+      }
+      
       if (!session) {
         return {
           success: false,

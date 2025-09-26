@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { getDatabase } from '../services/database.js';
 import type {
   BiasAnalysis,
   LogicValidation,
@@ -17,13 +18,42 @@ import type {
 
 export class DecisionAnalyzerTool {
   private sessions: Map<string, DecisionSession | ThinkingSession> = new Map();
+  private db = getDatabase();
+
+  /**
+   * Load session from database
+   */
+  private async loadSession(sessionId: string): Promise<DecisionSession | ThinkingSession | null> {
+    try {
+      // Check in-memory cache first
+      const session = this.sessions.get(sessionId);
+      if (session) {
+        return session;
+      }
+
+      // Load from database
+      const sessionData = await this.db.getSession(sessionId);
+      if (sessionData) {
+        const parsedSession = JSON.parse(sessionData.data);
+        // Convert date strings back to Date objects
+        parsedSession.createdAt = new Date(parsedSession.createdAt);
+        parsedSession.updatedAt = new Date(parsedSession.updatedAt);
+        
+        this.sessions.set(sessionId, parsedSession);
+        return parsedSession;
+      }
+    } catch (error) {
+      console.error('Failed to load session:', error);
+    }
+    return null;
+  }
 
   /**
    * Analyze bias in a decision or thinking session
    */
-  public analyzeBias(params: AnalyzeBiasParams): ToolResponse<BiasAnalysis> {
+  public async analyzeBias(params: AnalyzeBiasParams): Promise<ToolResponse<BiasAnalysis>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      const session = await this.loadSession(params.sessionId);
       if (!session) {
         return {
           success: false,
@@ -64,9 +94,9 @@ export class DecisionAnalyzerTool {
   /**
    * Validate logic in a decision session
    */
-  public validateLogic(params: ValidateLogicParams): ToolResponse<LogicValidation> {
+  public async validateLogic(params: ValidateLogicParams): Promise<ToolResponse<LogicValidation>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      const session = await this.loadSession(params.sessionId);
       if (!session) {
         return {
           success: false,
@@ -129,9 +159,9 @@ export class DecisionAnalyzerTool {
   /**
    * Assess risks in a decision session
    */
-  public assessRisks(params: AssessRisksParams): ToolResponse<RiskAssessment[]> {
+  public async assessRisks(params: AssessRisksParams): Promise<ToolResponse<RiskAssessment[]>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      const session = await this.loadSession(params.sessionId);
       if (!session) {
         return {
           success: false,
@@ -169,9 +199,9 @@ export class DecisionAnalyzerTool {
   /**
    * Generate alternatives for a decision session
    */
-  public generateAlternatives(params: GenerateAlternativesParams): ToolResponse<Alternative[]> {
+  public async generateAlternatives(params: GenerateAlternativesParams): Promise<ToolResponse<Alternative[]>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      const session = await this.loadSession(params.sessionId);
       if (!session) {
         return {
           success: false,
@@ -209,9 +239,9 @@ export class DecisionAnalyzerTool {
   /**
    * Perform comprehensive analysis
    */
-  public comprehensiveAnalysis(params: ComprehensiveAnalysisParams): ToolResponse<ComprehensiveAnalysis> {
+  public async comprehensiveAnalysis(params: ComprehensiveAnalysisParams): Promise<ToolResponse<ComprehensiveAnalysis>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      const session = await this.loadSession(params.sessionId);
       if (!session) {
         return {
           success: false,
@@ -220,7 +250,7 @@ export class DecisionAnalyzerTool {
       }
 
       // Perform all analyses
-      const biasAnalysis = this.analyzeBias({ 
+      const biasAnalysis = await this.analyzeBias({ 
         sessionId: params.sessionId, 
         includeMitigation: params.includeAll 
       });
@@ -230,21 +260,24 @@ export class DecisionAnalyzerTool {
       let alternatives: Alternative[] = [];
 
       if ('criteria' in session) {
-        logicValidation = this.validateLogic({ 
+        const logicResult = await this.validateLogic({ 
           sessionId: params.sessionId, 
           strictMode: params.includeAll 
-        }).data;
+        });
+        logicValidation = logicResult.data;
 
-        riskAssessment = this.assessRisks({ 
+        const riskResult = await this.assessRisks({ 
           sessionId: params.sessionId, 
           includeMitigation: params.includeAll 
-        }).data || [];
+        });
+        riskAssessment = riskResult.data || [];
 
-        alternatives = this.generateAlternatives({ 
+        const altResult = await this.generateAlternatives({ 
           sessionId: params.sessionId, 
           maxAlternatives: 5, 
           focusAreas: params.includeAll ? undefined : ['innovation', 'feasibility'] 
-        }).data || [];
+        });
+        alternatives = altResult.data || [];
       }
 
       const overallQuality = this.calculateOverallQuality(

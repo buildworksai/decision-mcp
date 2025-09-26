@@ -11,30 +11,31 @@ import { DatabaseService } from './services/database.js';
 import { CacheService } from './services/cache.js';
 import { PerformanceMonitor } from './services/performance.js';
 import { RateLimiter } from './services/rate-limiter.js';
-import { createSecurityMiddleware } from './services/security.js';
+import { SecurityService } from './services/security.js';
 
 // Global services
 const database = new DatabaseService();
 const cache = new CacheService();
 const performanceMonitor = new PerformanceMonitor();
-const globalRateLimiter = new RateLimiter({
-  windowMs: 60000, // 1 minute
-  maxRequests: 100 // 100 requests per minute
-});
-const security = createSecurityMiddleware();
+const globalRateLimiter = new RateLimiter();
+const security = new SecurityService();
 
 class DecisionMCPServer {
   private server: Server;
   private decisionMaker: DecisionMakerTool;
   private sequentialThinking: SequentialThinkingTool;
   private decisionAnalyzer: DecisionAnalyzerTool;
-  private security = security;
 
   constructor() {
     this.server = new Server(
       {
         name: 'Decision MCP by BuildWorks.AI',
         version: '2.2.0',
+      },
+      {
+        capabilities: {
+          tools: {},
+        },
       }
     );
 
@@ -311,7 +312,7 @@ class DecisionMCPServer {
       globalRateLimiter.isAllowed('global');
       
       // Validate and sanitize input
-      const context = this.security.validateInput(args.context as string, 'problem');
+      const context = this.security.validateInput(args.context as string, 'context');
       const criteria = args.criteria as any[] || [];
       const options = args.options as any[] || [];
       const evaluations = args.evaluations as any[] || [];
@@ -416,7 +417,7 @@ class DecisionMCPServer {
     return performanceMonitor.measureAsync('handleAnalyzeDecision', async () => {
       globalRateLimiter.isAllowed('global');
       
-      const sessionId = args.sessionId as string;
+      const sessionId = this.security.validateInput(args.sessionId as string, 'sessionId');
       const includeBias = (args.includeBias as boolean) ?? true;
       const includeLogic = (args.includeLogic as boolean) ?? true;
       const includeRisks = (args.includeRisks as boolean) ?? true;
@@ -540,7 +541,7 @@ class DecisionMCPServer {
     return performanceMonitor.measureAsync('handleManageSessions', async () => {
       globalRateLimiter.isAllowed('global');
       
-      const action = args.action as string;
+      const action = this.security.validateInput(args.action as string, 'action');
       const sessionId = args.sessionId as string;
       const type = (args.type as string) || 'all';
       const status = (args.status as string) || 'all';
@@ -604,23 +605,14 @@ class DecisionMCPServer {
     return performanceMonitor.measureAsync('handleValidateLogic', async () => {
       globalRateLimiter.isAllowed('global');
       
-      const sessionId = args.sessionId as string;
+      const sessionId = this.security.validateInput(args.sessionId as string, 'sessionId');
       const strictMode = (args.strictMode as boolean) || false;
 
-      // First check if it's a decision session
-      const decisionSession = await this.decisionMaker.getSession(sessionId);
-      if (decisionSession.success) {
-        const result = await this.decisionAnalyzer.validateLogic({ sessionId, strictMode });
-        this.security.auditAction('validate_logic', sessionId, { strictMode });
-        return this.formatResponse(result);
-      }
+      const result = await this.decisionAnalyzer.validateLogic({ sessionId, strictMode });
 
-      // If not a decision session, return error
-      this.security.auditAction('validate_logic', sessionId, { strictMode, error: 'Session not found' });
-      return this.formatResponse({
-        success: false,
-        error: 'Session not found or not a decision session'
-      });
+      this.security.auditAction('validate_logic', sessionId, { strictMode });
+
+      return this.formatResponse(result);
     });
   }
 
