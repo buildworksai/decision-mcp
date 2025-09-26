@@ -390,6 +390,18 @@ For issues and questions:
 
 ## Changelog
 
+### v2.2.3 (2025-09-26) - Emergency User Complaint Fix
+
+#### 🚨 **EMERGENCY FIX**
+- **Fixed Tool Registration Issue**: Reverted to simple tool names (make_decision, analyze_decision, etc.) that work with MCP clients
+- **Immediate User Relief**: Addresses high volume of user complaints about "No tools, prompts, or resources"
+- **5-Tool Architecture Preserved**: Maintains ultra-optimized architecture with working tool registration
+
+#### 🔧 **Technical Changes**
+- **Tool Names Simplified**: Removed MCP prefixes that were causing registration failures
+- **MCP Client Compatibility**: Ensured tools appear correctly in Cursor, Windsurf, and Claude
+- **Zero Breaking Changes**: Preserves all functionality while fixing registration
+
 ### v2.2.2 (2025-09-26) - Critical Package Distribution Fix
 
 #### 🚨 **Critical Fix**

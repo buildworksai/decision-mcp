@@ -52,7 +52,7 @@ class DecisionMCPServer {
         tools: [
           // 1. MAKE DECISION - Complete decision workflow
           {
-            name: 'mcp_decision-mcp_make_decision',
+            name: 'make_decision',
             description: 'Complete decision-making workflow: create session, add criteria/options, evaluate, analyze, and get recommendation',
             inputSchema: {
               type: 'object',
@@ -127,7 +127,7 @@ class DecisionMCPServer {
           },
           // 2. ANALYZE DECISION - Deep analysis and alternatives
           {
-            name: 'mcp_decision-mcp_analyze_decision',
+            name: 'analyze_decision',
             description: 'Comprehensive decision analysis: bias detection, logic validation, risk assessment, and alternative generation',
             inputSchema: {
               type: 'object',
@@ -162,7 +162,7 @@ class DecisionMCPServer {
           },
           // 3. STRUCTURED THINKING - Complete thinking workflow
           {
-            name: 'mcp_decision-mcp_structured_thinking',
+            name: 'structured_thinking',
             description: 'Complete structured thinking workflow: start session, add/revise thoughts, create branches, analyze progress, and conclude',
             inputSchema: {
               type: 'object',
@@ -214,7 +214,7 @@ class DecisionMCPServer {
           },
           // 4. MANAGE SESSIONS - Universal session management
           {
-            name: 'mcp_decision-mcp_manage_sessions',
+            name: 'manage_sessions',
             description: 'Universal session management: get, list, and manage decision and thinking sessions',
             inputSchema: {
               type: 'object',
@@ -244,7 +244,7 @@ class DecisionMCPServer {
           },
           // 5. VALIDATE LOGIC - Quick logic validation
           {
-            name: 'mcp_decision-mcp_validate_logic',
+            name: 'validate_logic',
             description: 'Quick logic validation for decision sessions',
             inputSchema: {
               type: 'object',
@@ -271,15 +271,15 @@ class DecisionMCPServer {
 
       try {
         switch (name) {
-          case 'mcp_decision-mcp_make_decision':
+          case 'make_decision':
             return await this.handleMakeDecision(args);
-          case 'mcp_decision-mcp_analyze_decision':
+          case 'analyze_decision':
             return await this.handleAnalyzeDecision(args);
-          case 'mcp_decision-mcp_structured_thinking':
+          case 'structured_thinking':
             return await this.handleStructuredThinking(args);
-          case 'mcp_decision-mcp_manage_sessions':
+          case 'manage_sessions':
             return await this.handleManageSessions(args);
-          case 'mcp_decision-mcp_validate_logic':
+          case 'validate_logic':
             return await this.handleValidateLogic(args);
           default:
             return {
