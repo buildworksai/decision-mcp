@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { DatabaseService } from '../services/database.js';
 import type {
   DecisionSession,
   Criteria,
@@ -16,11 +17,54 @@ import type {
 
 export class DecisionMakerTool {
   private sessions: Map<string, DecisionSession> = new Map();
+  private database: DatabaseService;
+  private dbInitialized: boolean = false;
+
+  constructor() {
+    this.database = new DatabaseService();
+    // Give database time to initialize
+    setTimeout(() => {
+      this.dbInitialized = true;
+    }, 1000);
+  }
+
+  private async loadSession(sessionId: string): Promise<DecisionSession | null> {
+    try {
+      const session = await this.database.getSession(sessionId);
+      if (session && session.type === 'decision') {
+        const sessionData = JSON.parse(session.data);
+        // Convert date strings back to Date objects
+        sessionData.createdAt = new Date(sessionData.createdAt);
+        sessionData.updatedAt = new Date(sessionData.updatedAt);
+        return sessionData as DecisionSession;
+      }
+    } catch (error) {
+      console.error('Failed to load session:', error);
+    }
+    return null;
+  }
+
+  private async saveSession(session: DecisionSession): Promise<void> {
+    try {
+      const sessionData = {
+        id: session.id,
+        type: 'decision' as const,
+        data: JSON.stringify(session),
+        createdAt: session.createdAt.toISOString(),
+        updatedAt: session.updatedAt.toISOString(),
+        status: session.status as 'active' | 'paused' | 'completed' | 'archived'
+      };
+      await this.database.saveSession(sessionData);
+    } catch (error) {
+      console.error('Failed to save session:', error);
+      throw error;
+    }
+  }
 
   /**
    * Start a new decision session
    */
-  public startDecision(params: StartDecisionParams): ToolResponse<DecisionSession> {
+  public async startDecision(params: StartDecisionParams): Promise<ToolResponse<DecisionSession>> {
     try {
       const validation = this.validateStartDecision(params);
       if (!validation.isValid) {
@@ -45,6 +89,9 @@ export class DecisionMakerTool {
       };
 
       this.sessions.set(sessionId, session);
+      
+      // Save to database synchronously
+      await this.saveSession(session);
 
       return {
         success: true,
@@ -65,14 +112,19 @@ export class DecisionMakerTool {
   /**
    * Add criteria to a decision session
    */
-  public addCriteria(params: { sessionId: string; name: string; description: string; weight: number; type: Criteria['type'] }): ToolResponse<Criteria> {
+  public async addCriteria(params: { sessionId: string; name: string; description: string; weight: number; type: Criteria['type'] }): Promise<ToolResponse<Criteria>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      let session = this.sessions.get(params.sessionId);
       if (!session) {
-        return {
-          success: false,
-          error: 'Decision session not found'
-        };
+        const loadedSession = await this.loadSession(params.sessionId);
+        if (!loadedSession) {
+          return {
+            success: false,
+            error: 'Decision session not found'
+          };
+        }
+        session = loadedSession;
+        this.sessions.set(params.sessionId, session);
       }
 
       if (session.status !== 'active') {
@@ -108,6 +160,9 @@ export class DecisionMakerTool {
       session.updatedAt = new Date();
 
       this.sessions.set(params.sessionId, session);
+      
+      // Save to database synchronously
+      await this.saveSession(session);
 
       return {
         success: true,
@@ -128,14 +183,19 @@ export class DecisionMakerTool {
   /**
    * Add an option to a decision session
    */
-  public addOption(params: { sessionId: string; name: string; description: string; pros: string[]; cons: string[]; risks: string[]; estimatedCost?: number; estimatedTime?: string }): ToolResponse<Option> {
+  public async addOption(params: { sessionId: string; name: string; description: string; pros: string[]; cons: string[]; risks: string[]; estimatedCost?: number; estimatedTime?: string }): Promise<ToolResponse<Option>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      let session = this.sessions.get(params.sessionId);
       if (!session) {
-        return {
-          success: false,
-          error: 'Decision session not found'
-        };
+        const loadedSession = await this.loadSession(params.sessionId);
+        if (!loadedSession) {
+          return {
+            success: false,
+            error: 'Decision session not found'
+          };
+        }
+        session = loadedSession;
+        this.sessions.set(params.sessionId, session);
       }
 
       if (session.status !== 'active') {
@@ -174,6 +234,9 @@ export class DecisionMakerTool {
       session.updatedAt = new Date();
 
       this.sessions.set(params.sessionId, session);
+      
+      // Save to database synchronously
+      await this.saveSession(session);
 
       return {
         success: true,
@@ -194,14 +257,19 @@ export class DecisionMakerTool {
   /**
    * Evaluate an option against criteria
    */
-  public evaluateOption(params: EvaluateOptionParams): ToolResponse<Evaluation> {
+  public async evaluateOption(params: EvaluateOptionParams): Promise<ToolResponse<Evaluation>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      let session = this.sessions.get(params.sessionId);
       if (!session) {
-        return {
-          success: false,
-          error: 'Decision session not found'
-        };
+        const loadedSession = await this.loadSession(params.sessionId);
+        if (!loadedSession) {
+          return {
+            success: false,
+            error: 'Decision session not found'
+          };
+        }
+        session = loadedSession;
+        this.sessions.set(params.sessionId, session);
       }
 
       const option = session.options.find(o => o.id === params.optionId);
@@ -249,6 +317,9 @@ export class DecisionMakerTool {
       session.updatedAt = new Date();
 
       this.sessions.set(params.sessionId, session);
+      
+      // Save to database synchronously
+      await this.saveSession(session);
 
       return {
         success: true,
@@ -270,14 +341,19 @@ export class DecisionMakerTool {
   /**
    * Analyze the decision session
    */
-  public analyzeDecision(params: AnalyzeDecisionParams): ToolResponse<DecisionAnalysis> {
+  public async analyzeDecision(params: AnalyzeDecisionParams): Promise<ToolResponse<DecisionAnalysis>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      let session = this.sessions.get(params.sessionId);
       if (!session) {
-        return {
-          success: false,
-          error: 'Decision session not found'
-        };
+        const loadedSession = await this.loadSession(params.sessionId);
+        if (!loadedSession) {
+          return {
+            success: false,
+            error: 'Decision session not found'
+          };
+        }
+        session = loadedSession;
+        this.sessions.set(params.sessionId, session);
       }
 
       if (session.evaluations.length === 0) {
@@ -347,17 +423,22 @@ export class DecisionMakerTool {
   /**
    * Make a recommendation
    */
-  public makeRecommendation(params: MakeRecommendationParams): ToolResponse<Recommendation> {
+  public async makeRecommendation(params: MakeRecommendationParams): Promise<ToolResponse<Recommendation>> {
     try {
-      const session = this.sessions.get(params.sessionId);
+      let session = this.sessions.get(params.sessionId);
       if (!session) {
-        return {
-          success: false,
-          error: 'Decision session not found'
-        };
+        const loadedSession = await this.loadSession(params.sessionId);
+        if (!loadedSession) {
+          return {
+            success: false,
+            error: 'Decision session not found'
+          };
+        }
+        session = loadedSession;
+        this.sessions.set(params.sessionId, session);
       }
 
-      const analysisResult = this.analyzeDecision({ 
+      const analysisResult = await this.analyzeDecision({ 
         sessionId: params.sessionId, 
         includeAlternatives: true 
       });
@@ -379,10 +460,10 @@ export class DecisionMakerTool {
         };
       }
 
-      if (analysis.confidence < (params.minConfidence || 0.6)) {
+      if (analysis.confidence < (params.minConfidence || 0.3)) {
         return {
           success: false,
-          error: `Confidence level (${analysis.confidence}) is below minimum threshold (${params.minConfidence || 0.6})`
+          error: `Confidence level (${analysis.confidence}) is below minimum threshold (${params.minConfidence || 0.3})`
         };
       }
 
@@ -424,34 +505,55 @@ export class DecisionMakerTool {
   /**
    * Get a decision session by ID
    */
-  public getSession(sessionId: string): ToolResponse<DecisionSession> {
-    const session = this.sessions.get(sessionId);
-    if (!session) {
+  public async getSession(sessionId: string): Promise<ToolResponse<DecisionSession>> {
+    try {
+      let session = this.sessions.get(sessionId);
+      if (!session) {
+        const loadedSession = await this.loadSession(sessionId);
+        if (!loadedSession) {
+          return {
+            success: false,
+            error: 'Decision session not found'
+          };
+        }
+        session = loadedSession;
+        this.sessions.set(sessionId, session);
+      }
+
+      return {
+        success: true,
+        data: session
+      };
+    } catch (error) {
       return {
         success: false,
-        error: 'Decision session not found'
+        error: `Failed to get session: ${error instanceof Error ? error.message : 'Unknown error'}`
       };
     }
-
-    return {
-      success: true,
-      data: session
-    };
   }
 
   /**
    * List all decision sessions
    */
-  public listSessions(): ToolResponse<DecisionSession[]> {
-    const sessions = Array.from(this.sessions.values());
-    return {
-      success: true,
-      data: sessions,
-      metadata: {
-        totalSessions: sessions.length,
-        activeSessions: sessions.filter(s => s.status === 'active').length
-      }
-    };
+  public async listSessions(): Promise<ToolResponse<DecisionSession[]>> {
+    try {
+      const dbSessions = await this.database.getAllSessions('decision');
+      const sessions = dbSessions.map(s => JSON.parse(s.data) as DecisionSession);
+      
+      return {
+        success: true,
+        data: sessions,
+        metadata: {
+          totalSessions: sessions.length,
+          activeSessions: sessions.filter(s => s.status === 'active').length
+        }
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to list sessions: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
   }
 
   // Private helper methods

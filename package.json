@@ -15,15 +15,11 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "docker:build": "docker build -t decision-mcp:latest .",
-    "docker:run": "docker run --rm -i decision-mcp:latest",
-    "docker:dev": "docker-compose -f docker-compose.dev.yml up",
-    "setup": "./scripts/setup.sh"
+    "docker:run": "docker run --rm -i decision-mcp:latest"
   },
   "files": [
     "dist/",
-    "README.md",
-    "examples/",
-    "SETUP.md"
+    "README.md"
   ],
   "keywords": [
     "buildworks-ai",

@@ -645,42 +645,42 @@ class DecisionMCPServer {
 
   // Decision Making Tool Handlers
   private async handleStartDecision(args: Record<string, unknown>) {
-    const result = this.decisionMaker.startDecision(args as any);
+    const result = await this.decisionMaker.startDecision(args as any);
     return this.formatResponse(result);
   }
 
   private async handleAddCriteria(args: Record<string, unknown>) {
-    const result = this.decisionMaker.addCriteria(args as any);
+    const result = await this.decisionMaker.addCriteria(args as any);
     return this.formatResponse(result);
   }
 
   private async handleAddOption(args: Record<string, unknown>) {
-    const result = this.decisionMaker.addOption(args as any);
+    const result = await this.decisionMaker.addOption(args as any);
     return this.formatResponse(result);
   }
 
   private async handleEvaluateOption(args: Record<string, unknown>) {
-    const result = this.decisionMaker.evaluateOption(args as any);
+    const result = await this.decisionMaker.evaluateOption(args as any);
     return this.formatResponse(result);
   }
 
   private async handleAnalyzeDecision(args: Record<string, unknown>) {
-    const result = this.decisionMaker.analyzeDecision(args as any);
+    const result = await this.decisionMaker.analyzeDecision(args as any);
     return this.formatResponse(result);
   }
 
   private async handleMakeRecommendation(args: Record<string, unknown>) {
-    const result = this.decisionMaker.makeRecommendation(args as any);
+    const result = await this.decisionMaker.makeRecommendation(args as any);
     return this.formatResponse(result);
   }
 
   private async handleGetDecisionSession(args: Record<string, unknown>) {
-    const result = this.decisionMaker.getSession(args.sessionId as string);
+    const result = await this.decisionMaker.getSession(args.sessionId as string);
     return this.formatResponse(result);
   }
 
   private async handleListDecisionSessions(_args: Record<string, unknown>) {
-    const result = this.decisionMaker.listSessions();
+    const result = await this.decisionMaker.listSessions();
     return this.formatResponse(result);
   }
 
@@ -739,7 +739,7 @@ class DecisionMCPServer {
   // Helper methods
   private async getSessionForAnalysis(sessionId: string): Promise<unknown> {
     // Try to get from decision maker first
-    const decisionResult = this.decisionMaker.getSession(sessionId);
+    const decisionResult = await this.decisionMaker.getSession(sessionId);
     if (decisionResult.success && decisionResult.data) {
       return { ...decisionResult.data, type: 'decision' };
     }
