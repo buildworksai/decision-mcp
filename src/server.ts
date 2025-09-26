@@ -31,7 +31,7 @@ class DecisionMCPServer {
     this.server = new Server(
       {
         name: 'Decision MCP by BuildWorks.AI',
-        version: '1.0.0',
+        version: '2.1.0',
       }
     );
 
