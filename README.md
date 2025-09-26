@@ -359,6 +359,23 @@ For issues and questions:
 
 ## Changelog
 
+### v2.1.2 (2025-09-26) - MCP Configuration Fix
+
+#### 🐛 **Critical Bug Fixes**
+- **Fixed Red Dot Error**: Resolved version mismatch between server.ts (1.0.0) and package.json (2.1.0)
+- **Updated MCP Configuration**: Changed from global `decision-mcp` to `npx buildworks-ai-decision-mcp` approach
+- **Improved Installation Process**: Emphasized npx as recommended approach to avoid global installation issues
+
+#### 📚 **Documentation Updates**
+- Updated MCP configuration examples in README.md
+- Added installation section emphasizing npx approach
+- Added note explaining benefits of npx (always latest version, no global install issues)
+
+### v2.1.1 (2025-09-26) - Server Version Fix
+
+#### 🐛 **Bug Fixes**
+- Fixed server version mismatch that was causing MCP client connection issues
+
 ### v2.1.0 (2025-09-26) - Professional Code Quality Release
 
 #### 🎯 **Major Improvements**
