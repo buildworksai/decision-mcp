@@ -1,0 +1,34 @@
+{
+  "common": {
+    "success": "Succès",
+    "error": "Erreur",
+    "validation_failed": "Validation échouée",
+    "session_not_found": "Session non trouvée",
+    "invalid_input": "Entrée invalide fournie"
+  },
+  "thinking": {
+    "session_started": "Session de réflexion démarrée avec succès",
+    "thought_added": "Pensée ajoutée avec succès",
+    "thought_revised": "Pensée révisée avec succès",
+    "branch_created": "Branche créée avec succès",
+    "session_concluded": "Session de réflexion conclue avec succès"
+  },
+  "decision": {
+    "session_started": "Session de décision démarrée avec succès",
+    "criteria_added": "Critère ajouté avec succès",
+    "option_added": "Option ajoutée avec succès",
+    "option_evaluated": "Option évaluée avec succès",
+    "recommendation_generated": "Recommandation générée avec succès"
+  },
+  "external": {
+    "data_fetched": "Données externes récupérées avec succès",
+    "data_attached": "Données externes attachées à la session",
+    "source_not_found": "Source de données externes non trouvée"
+  },
+  "analysis": {
+    "bias_detected": "Analyse de biais terminée",
+    "logic_validated": "Validation de logique terminée",
+    "risks_assessed": "Évaluation des risques terminée",
+    "alternatives_generated": "Alternatives générées avec succès"
+  }
+}

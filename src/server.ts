@@ -9,12 +9,23 @@ import {
 import { SequentialThinkingTool } from './tools/sequential-thinking.js';
 import { DecisionMakerTool } from './tools/decision-maker.js';
 import { DecisionAnalyzerTool } from './tools/decision-analyzer.js';
+import { ExternalDataTool } from './tools/external-data-tool.js';
+import { VisualizationTool } from './tools/visualization-tool.js';
+import { NLPTool } from './tools/nlp-tool.js';
+import { sessionRateLimiter, globalRateLimiter, analysisRateLimiter } from './services/rate-limiter.js';
+import { createSecurityMiddleware } from './services/security.js';
+import { performanceMonitor } from './services/performance.js';
+import { i18nService } from './services/i18n.js';
 
 class DecisionMCPServer {
   private server: Server;
   private sequentialThinking: SequentialThinkingTool;
   private decisionMaker: DecisionMakerTool;
   private decisionAnalyzer: DecisionAnalyzerTool;
+  private externalData: ExternalDataTool;
+  private visualization: VisualizationTool;
+  private nlp: NLPTool;
+  private security = createSecurityMiddleware();
 
   constructor() {
     this.server = new Server(
@@ -27,6 +38,12 @@ class DecisionMCPServer {
     this.sequentialThinking = new SequentialThinkingTool();
     this.decisionMaker = new DecisionMakerTool();
     this.decisionAnalyzer = new DecisionAnalyzerTool();
+    this.externalData = new ExternalDataTool();
+    this.visualization = new VisualizationTool();
+    this.nlp = new NLPTool();
+
+    // Initialize i18n
+    i18nService.initialize('en').catch(console.error);
 
     this.setupToolHandlers();
   }
@@ -556,13 +573,44 @@ class DecisionMCPServer {
 
   // Sequential Thinking Tool Handlers
   private async handleStartThinking(args: Record<string, unknown>) {
-    const result = this.sequentialThinking.startThinking(args as any);
-    return this.formatResponse(result);
+    return performanceMonitor.measureAsync('handleStartThinking', async () => {
+      // Apply global rate limiting
+      globalRateLimiter.isAllowed('global');
+      
+      // Validate and sanitize input
+      const problem = this.security.validateInput(args.problem as string, 'problem');
+      const sanitizedArgs = { ...args, problem };
+      
+      const result = await this.sequentialThinking.startThinking(sanitizedArgs as any);
+      
+      // Audit the action
+      this.security.auditAction('start_thinking', result.data?.id, { 
+        problemLength: problem.length 
+      });
+      
+      return this.formatResponse(result);
+    });
   }
 
   private async handleAddThought(args: Record<string, unknown>) {
-    const result = this.sequentialThinking.addThought(args as any);
-    return this.formatResponse(result);
+    return performanceMonitor.measureAsync('handleAddThought', async () => {
+      // Apply session rate limiting
+      const sessionId = args.sessionId as string;
+      sessionRateLimiter.isAllowed(sessionId);
+      
+      // Validate and sanitize input
+      const thought = this.security.validateInput(args.thought as string, 'thought');
+      const sanitizedArgs = { ...args, thought };
+      
+      const result = this.sequentialThinking.addThought(sanitizedArgs as any);
+      
+      // Audit the action
+      this.security.auditAction('add_thought', sessionId, { 
+        thoughtLength: thought.length 
+      });
+      
+      return this.formatResponse(result);
+    });
   }
 
   private async handleReviseThought(args: Record<string, unknown>) {
@@ -586,7 +634,7 @@ class DecisionMCPServer {
   }
 
   private async handleGetThinkingSession(args: Record<string, unknown>) {
-    const result = this.sequentialThinking.getSession(args.sessionId as string);
+    const result = await this.sequentialThinking.getSession(args.sessionId as string);
     return this.formatResponse(result);
   }
 
@@ -639,7 +687,7 @@ class DecisionMCPServer {
   // Decision Analyzer Tool Handlers
   private async handleAnalyzeBias(args: Record<string, unknown>) {
     // First get the session to analyze
-    const session = this.getSessionForAnalysis(args.sessionId as string);
+    const session = await this.getSessionForAnalysis(args.sessionId as string);
     if (session) {
       this.decisionAnalyzer.setSession(session as any);
     }
@@ -649,7 +697,7 @@ class DecisionMCPServer {
   }
 
   private async handleValidateLogic(args: Record<string, unknown>) {
-    const session = this.getSessionForAnalysis(args.sessionId as string);
+    const session = await this.getSessionForAnalysis(args.sessionId as string);
     if (session) {
       this.decisionAnalyzer.setSession(session as any);
     }
@@ -659,7 +707,7 @@ class DecisionMCPServer {
   }
 
   private async handleAssessRisks(args: Record<string, unknown>) {
-    const session = this.getSessionForAnalysis(args.sessionId as string);
+    const session = await this.getSessionForAnalysis(args.sessionId as string);
     if (session) {
       this.decisionAnalyzer.setSession(session as any);
     }
@@ -669,7 +717,7 @@ class DecisionMCPServer {
   }
 
   private async handleGenerateAlternatives(args: Record<string, unknown>) {
-    const session = this.getSessionForAnalysis(args.sessionId as string);
+    const session = await this.getSessionForAnalysis(args.sessionId as string);
     if (session) {
       this.decisionAnalyzer.setSession(session as any);
     }
@@ -679,7 +727,7 @@ class DecisionMCPServer {
   }
 
   private async handleComprehensiveAnalysis(args: Record<string, unknown>) {
-    const session = this.getSessionForAnalysis(args.sessionId as string);
+    const session = await this.getSessionForAnalysis(args.sessionId as string);
     if (session) {
       this.decisionAnalyzer.setSession(session as any);
     }
@@ -689,7 +737,7 @@ class DecisionMCPServer {
   }
 
   // Helper methods
-  private getSessionForAnalysis(sessionId: string): unknown {
+  private async getSessionForAnalysis(sessionId: string): Promise<unknown> {
     // Try to get from decision maker first
     const decisionResult = this.decisionMaker.getSession(sessionId);
     if (decisionResult.success && decisionResult.data) {
@@ -697,7 +745,7 @@ class DecisionMCPServer {
     }
 
     // Try to get from sequential thinking
-    const thinkingResult = this.sequentialThinking.getSession(sessionId);
+    const thinkingResult = await this.sequentialThinking.getSession(sessionId);
     if (thinkingResult.success && thinkingResult.data) {
       return { ...thinkingResult.data, type: 'thinking' };
     }

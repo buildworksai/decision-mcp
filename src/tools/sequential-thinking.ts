@@ -13,15 +13,19 @@ import type {
   ToolResponse,
   ValidationResult
 } from '../types/index.js';
+import { getDatabase } from '../services/database.js';
+import { sessionCache } from '../services/cache.js';
+import { performanceMonitor } from '../services/performance.js';
 
 export class SequentialThinkingTool {
   private sessions: Map<string, ThinkingSession> = new Map();
   private branches: Map<string, Branch> = new Map();
+  private db = getDatabase();
 
   /**
    * Start a new thinking session
    */
-  public startThinking(params: StartThinkingParams): ToolResponse<ThinkingSession> {
+  public async startThinking(params: StartThinkingParams): Promise<ToolResponse<ThinkingSession>> {
     try {
       const validation = this.validateStartThinking(params);
       if (!validation.isValid) {
@@ -45,6 +49,9 @@ export class SequentialThinkingTool {
       };
 
       this.sessions.set(sessionId, session);
+      
+      // Save to database
+      await this.saveSessionToDatabase(session);
 
       return {
         success: true,
@@ -355,19 +362,42 @@ export class SequentialThinkingTool {
   /**
    * Get a thinking session by ID
    */
-  public getSession(sessionId: string): ToolResponse<ThinkingSession> {
-    const session = this.sessions.get(sessionId);
-    if (!session) {
-      return {
-        success: false,
-        error: 'Thinking session not found'
-      };
-    }
+  public async getSession(sessionId: string): Promise<ToolResponse<ThinkingSession>> {
+    return performanceMonitor.measureAsync('getSession', async () => {
+      let session = this.sessions.get(sessionId);
+      
+      // Check cache first
+      if (!session) {
+        const cachedSession = sessionCache.get(sessionId);
+        if (cachedSession) {
+          session = cachedSession as ThinkingSession;
+          this.sessions.set(sessionId, session);
+        }
+      }
+      
+      // If not in memory or cache, try to load from database
+      if (!session) {
+        const loadedSession = await this.loadSessionFromDatabase(sessionId);
+        if (loadedSession) {
+          session = loadedSession;
+          this.sessions.set(sessionId, session);
+          // Cache the loaded session
+          sessionCache.set(sessionId, session);
+        }
+      }
+      
+      if (!session) {
+        return {
+          success: false,
+          error: 'Thinking session not found'
+        };
+      }
 
-    return {
-      success: true,
-      data: session
-    };
+      return {
+        success: true,
+        data: session
+      };
+    });
   }
 
   /**
@@ -386,6 +416,38 @@ export class SequentialThinkingTool {
   }
 
   // Private helper methods
+  private async saveSessionToDatabase(session: ThinkingSession): Promise<void> {
+    try {
+      await this.db.saveSession({
+        id: session.id,
+        type: 'thinking',
+        data: JSON.stringify(session),
+        createdAt: session.createdAt.toISOString(),
+        updatedAt: session.updatedAt.toISOString(),
+        status: session.status
+      });
+      
+      // Update cache
+      sessionCache.set(session.id, session);
+    } catch (error) {
+      console.error('Failed to save session to database:', error);
+      // Don't throw - allow in-memory operation to continue
+    }
+  }
+
+  private async loadSessionFromDatabase(sessionId: string): Promise<ThinkingSession | null> {
+    try {
+      const sessionData = await this.db.getSession(sessionId);
+      if (sessionData && sessionData.type === 'thinking') {
+        return JSON.parse(sessionData.data) as ThinkingSession;
+      }
+      return null;
+    } catch (error) {
+      console.error('Failed to load session from database:', error);
+      return null;
+    }
+  }
+
   private validateStartThinking(params: StartThinkingParams): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];

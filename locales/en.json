@@ -1,0 +1,80 @@
+{
+  "common": {
+    "success": "Success",
+    "error": "Error",
+    "validation_failed": "Validation failed",
+    "session_not_found": "Session not found",
+    "invalid_input": "Invalid input provided"
+  },
+  "thinking": {
+    "session_started": "Thinking session started successfully",
+    "thought_added": "Thought added successfully",
+    "thought_revised": "Thought revised successfully",
+    "branch_created": "Branch created successfully",
+    "session_concluded": "Thinking session concluded successfully"
+  },
+  "decision": {
+    "session_started": "Decision session started successfully",
+    "criteria_added": "Criteria added successfully",
+    "option_added": "Option added successfully",
+    "option_evaluated": "Option evaluated successfully",
+    "recommendation_generated": "Recommendation generated successfully"
+  },
+  "external": {
+    "data_fetched": "External data fetched successfully",
+    "data_attached": "External data attached to session",
+    "source_not_found": "External data source not found"
+  },
+  "analysis": {
+    "bias_detected": "Bias analysis completed",
+    "logic_validated": "Logic validation completed",
+    "risks_assessed": "Risk assessment completed",
+    "alternatives_generated": "Alternatives generated successfully"
+  },
+  "errors": {
+    "rate_limit_exceeded": "Rate limit exceeded. Please try again later.",
+    "session_expired": "Session has expired",
+    "invalid_session_id": "Invalid session ID format",
+    "data_source_error": "Error fetching from external data source"
+  },
+  "messages": {
+    "welcome": "Welcome to Decision MCP by BuildWorks.AI",
+    "session_recovered": "Session recovered from database",
+    "cache_hit": "Data retrieved from cache",
+    "performance_optimized": "Operation completed with performance optimization"
+  },
+  "validation": {
+    "problem": {
+      "required": "Problem description is required",
+      "min_length": "Problem description must be at least 10 characters",
+      "max_length": "Problem description must be less than 5000 characters"
+    },
+    "thought": {
+      "required": "Thought content is required",
+      "max_length": "Thought must be less than 2000 characters"
+    },
+    "criteria": {
+      "name_required": "Criteria name is required",
+      "name_max_length": "Criteria name must be less than 100 characters",
+      "description_required": "Criteria description is required",
+      "description_max_length": "Criteria description must be less than 500 characters"
+    }
+  },
+  "tools": {
+    "start_thinking": {
+      "description": "Start a new sequential thinking session to break down complex problems"
+    },
+    "add_thought": {
+      "description": "Add a thought to an existing thinking session"
+    },
+    "start_decision": {
+      "description": "Start a new decision-making session with criteria and options"
+    },
+    "add_criteria": {
+      "description": "Add evaluation criteria to a decision session"
+    },
+    "fetch_external_data": {
+      "description": "Fetch data from external sources to inform decisions"
+    }
+  }
+}

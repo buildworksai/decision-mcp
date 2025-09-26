@@ -1,0 +1,34 @@
+{
+  "common": {
+    "success": "Éxito",
+    "error": "Error",
+    "validation_failed": "Validación fallida",
+    "session_not_found": "Sesión no encontrada",
+    "invalid_input": "Entrada inválida proporcionada"
+  },
+  "thinking": {
+    "session_started": "Sesión de pensamiento iniciada exitosamente",
+    "thought_added": "Pensamiento agregado exitosamente",
+    "thought_revised": "Pensamiento revisado exitosamente",
+    "branch_created": "Rama creada exitosamente",
+    "session_concluded": "Sesión de pensamiento concluida exitosamente"
+  },
+  "decision": {
+    "session_started": "Sesión de decisión iniciada exitosamente",
+    "criteria_added": "Criterio agregado exitosamente",
+    "option_added": "Opción agregada exitosamente",
+    "option_evaluated": "Opción evaluada exitosamente",
+    "recommendation_generated": "Recomendación generada exitosamente"
+  },
+  "external": {
+    "data_fetched": "Datos externos obtenidos exitosamente",
+    "data_attached": "Datos externos adjuntos a la sesión",
+    "source_not_found": "Fuente de datos externos no encontrada"
+  },
+  "analysis": {
+    "bias_detected": "Análisis de sesgo completado",
+    "logic_validated": "Validación de lógica completada",
+    "risks_assessed": "Evaluación de riesgos completada",
+    "alternatives_generated": "Alternativas generadas exitosamente"
+  }
+}

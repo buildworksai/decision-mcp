@@ -7,8 +7,6 @@ import type {
   DecisionAnalysis,
   Recommendation,
   StartDecisionParams,
-  AddCriteriaParams,
-  AddOptionParams,
   EvaluateOptionParams,
   AnalyzeDecisionParams,
   MakeRecommendationParams,
@@ -67,7 +65,7 @@ export class DecisionMakerTool {
   /**
    * Add criteria to a decision session
    */
-  public addCriteria(params: any): ToolResponse<Criteria> {
+  public addCriteria(params: { sessionId: string; name: string; description: string; weight: number; type: Criteria['type'] }): ToolResponse<Criteria> {
     try {
       const session = this.sessions.get(params.sessionId);
       if (!session) {
@@ -130,7 +128,7 @@ export class DecisionMakerTool {
   /**
    * Add an option to a decision session
    */
-  public addOption(params: any): ToolResponse<Option> {
+  public addOption(params: { sessionId: string; name: string; description: string; pros: string[]; cons: string[]; risks: string[]; estimatedCost?: number; estimatedTime?: string }): ToolResponse<Option> {
     try {
       const session = this.sessions.get(params.sessionId);
       if (!session) {
@@ -313,7 +311,7 @@ export class DecisionMakerTool {
       
       // Generate alternatives if requested
       const alternatives = params.includeAlternatives 
-        ? this.generateAlternatives(session, topOption)
+        ? this.generateAlternatives(session)
         : [];
       
       // Generate next steps
@@ -612,7 +610,7 @@ export class DecisionMakerTool {
     return risks.slice(0, 5); // Return top 5 risks
   }
 
-  private generateAlternatives(session: DecisionSession, _topOption: Option): string[] {
+  private generateAlternatives(session: DecisionSession): string[] {
     const alternatives: string[] = [];
     
     // Suggest other options that scored well

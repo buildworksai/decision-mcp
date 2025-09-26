@@ -83,14 +83,14 @@ export class DecisionAnalyzerTool {
 
       const decisionSession = session as DecisionSession;
       const errors: string[] = [];
-      const warnings: string[] = [];
+    const warnings: string[] = [];
       const suggestions: string[] = [];
 
       // Validate criteria consistency
       this.validateCriteriaConsistency(decisionSession, errors, warnings);
       
       // Validate evaluation completeness
-      this.validateEvaluationCompleteness(decisionSession, errors, warnings);
+      this.validateEvaluationCompleteness(decisionSession, errors);
       
       // Validate score consistency
       this.validateScoreConsistency(decisionSession, errors, warnings, suggestions);
@@ -468,7 +468,7 @@ export class DecisionAnalyzerTool {
     }
   }
 
-  private validateEvaluationCompleteness(session: DecisionSession, errors: string[], _warnings: string[]): void {
+  private validateEvaluationCompleteness(session: DecisionSession, errors: string[]): void {
     const evaluatedOptions = new Set(session.evaluations.map(e => e.optionId));
     const allOptions = new Set(session.options.map(o => o.id));
 
