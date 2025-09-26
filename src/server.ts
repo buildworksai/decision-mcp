@@ -34,7 +34,7 @@ class DecisionMCPServer {
     this.server = new Server(
       {
         name: 'Decision MCP by BuildWorks.AI',
-        version: '2.2.0',
+        version: '2.2.1',
       }
     );
 
@@ -52,7 +52,7 @@ class DecisionMCPServer {
         tools: [
           // 1. MAKE DECISION - Complete decision workflow
           {
-            name: 'make_decision',
+            name: 'mcp_decision-mcp_make_decision',
             description: 'Complete decision-making workflow: create session, add criteria/options, evaluate, analyze, and get recommendation',
             inputSchema: {
               type: 'object',
@@ -127,7 +127,7 @@ class DecisionMCPServer {
           },
           // 2. ANALYZE DECISION - Deep analysis and alternatives
           {
-            name: 'analyze_decision',
+            name: 'mcp_decision-mcp_analyze_decision',
             description: 'Comprehensive decision analysis: bias detection, logic validation, risk assessment, and alternative generation',
             inputSchema: {
               type: 'object',
@@ -162,7 +162,7 @@ class DecisionMCPServer {
           },
           // 3. STRUCTURED THINKING - Complete thinking workflow
           {
-            name: 'structured_thinking',
+            name: 'mcp_decision-mcp_structured_thinking',
             description: 'Complete structured thinking workflow: start session, add/revise thoughts, create branches, analyze progress, and conclude',
             inputSchema: {
               type: 'object',
@@ -214,7 +214,7 @@ class DecisionMCPServer {
           },
           // 4. MANAGE SESSIONS - Universal session management
           {
-            name: 'manage_sessions',
+            name: 'mcp_decision-mcp_manage_sessions',
             description: 'Universal session management: get, list, and manage decision and thinking sessions',
             inputSchema: {
               type: 'object',
@@ -244,7 +244,7 @@ class DecisionMCPServer {
           },
           // 5. VALIDATE LOGIC - Quick logic validation
           {
-            name: 'validate_logic',
+            name: 'mcp_decision-mcp_validate_logic',
             description: 'Quick logic validation for decision sessions',
             inputSchema: {
               type: 'object',
@@ -271,15 +271,15 @@ class DecisionMCPServer {
 
       try {
         switch (name) {
-          case 'make_decision':
+          case 'mcp_decision-mcp_make_decision':
             return await this.handleMakeDecision(args);
-          case 'analyze_decision':
+          case 'mcp_decision-mcp_analyze_decision':
             return await this.handleAnalyzeDecision(args);
-          case 'structured_thinking':
+          case 'mcp_decision-mcp_structured_thinking':
             return await this.handleStructuredThinking(args);
-          case 'manage_sessions':
+          case 'mcp_decision-mcp_manage_sessions':
             return await this.handleManageSessions(args);
-          case 'validate_logic':
+          case 'mcp_decision-mcp_validate_logic':
             return await this.handleValidateLogic(args);
           default:
             return {

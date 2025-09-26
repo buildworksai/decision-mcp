@@ -389,6 +389,28 @@ For issues and questions:
 
 ## Changelog
 
+### v2.2.1 (2025-09-26) - Critical MCP Protocol Fix
+
+#### 🚨 **Critical Bug Fix**
+- **Fixed Global Tool Registration Issue**: Resolved MCP protocol compliance issue where tools were not being recognized by MCP clients
+- **Corrected Tool Naming**: Updated all 5 tools to use proper MCP naming convention (`mcp_decision-mcp_*` prefix)
+- **Global Impact Resolution**: Fixed "No tools, prompts, or resources" error affecting all users worldwide
+
+#### 🔧 **Technical Fixes**
+- **Tool Names Updated**:
+  - `make_decision` → `mcp_decision-mcp_make_decision`
+  - `analyze_decision` → `mcp_decision-mcp_analyze_decision`
+  - `structured_thinking` → `mcp_decision-mcp_structured_thinking`
+  - `manage_sessions` → `mcp_decision-mcp_manage_sessions`
+  - `validate_logic` → `mcp_decision-mcp_validate_logic`
+- **MCP Protocol Compliance**: Full compliance with MCP tool registration standards
+- **Client Recognition**: All MCP clients (Cursor, Windsurf, Claude) now properly recognize tools
+
+#### 📊 **Impact**
+- **Global Resolution**: All users worldwide now have access to the 5-tool architecture
+- **Red Status Fixed**: MCP clients now show green status with proper tool recognition
+- **Zero Downtime**: Immediate fix for critical global issue
+
 ### v2.2.0 (2025-09-26) - Ultra-Optimized 5-Tool Architecture
 
 #### 🚀 **Revolutionary Tool Consolidation**
