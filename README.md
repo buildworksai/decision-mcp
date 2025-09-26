@@ -357,7 +357,7 @@ For issues and questions:
 
 ## Roadmap
 
-### ✅ Completed (v2.2.1) - Ultra-Optimized Architecture
+### ✅ Completed (v2.2.2) - Ultra-Optimized Architecture
 - [x] **Revolutionary tool consolidation** - 76% reduction: 21 tools → 5 ultra-optimized tools
 - [x] **Complete decision workflow** - `mcp_decision-mcp_make_decision` tool consolidates 8 tools into 1
 - [x] **Deep analysis suite** - `mcp_decision-mcp_analyze_decision` tool consolidates 5 analysis tools into 1
@@ -389,6 +389,18 @@ For issues and questions:
 - None - Project is feature complete
 
 ## Changelog
+
+### v2.2.2 (2025-09-26) - Critical Package Distribution Fix
+
+#### 🚨 **Critical Fix**
+- **Fixed Package Distribution Issue**: Resolved issue where published v2.2.1 package contained old tool implementation instead of new 5-tool architecture
+- **Clean Build Process**: Cleaned and rebuilt dist folder to ensure correct code is packaged
+- **Verified Tool Registration**: Confirmed all 5 tools now use proper MCP naming convention in published package
+
+#### 🔧 **Technical Fixes**
+- **Build Artifacts Cleanup**: Removed corrupted dist files (server-new.js, server-old.js)
+- **Package Integrity**: Ensured published package contains correct compiled code
+- **Tool Verification**: Verified all 5 MCP-compliant tools are properly packaged
 
 ### v2.2.1 (2025-09-26) - Critical MCP Protocol Fix
 
