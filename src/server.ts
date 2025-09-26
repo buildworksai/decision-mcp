@@ -34,7 +34,7 @@ class DecisionMCPServer {
     this.server = new Server(
       {
         name: 'Decision MCP by BuildWorks.AI',
-        version: '2.2.2',
+        version: '2.2.4',
       }
     );
 
@@ -647,6 +647,10 @@ class DecisionMCPServer {
   }
 
   async run(): Promise<void> {
+    // Wait for database initialization before starting server
+    await database.waitForInitialization();
+    console.error('Database initialized successfully');
+    
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     console.error('Decision MCP by BuildWorks.AI — running on stdio');

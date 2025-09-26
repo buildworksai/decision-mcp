@@ -14,6 +14,7 @@ export interface SessionData {
 export class DatabaseService {
   private db: Database.Database;
   private dbPath: string;
+  private initializationPromise: Promise<void>;
 
   constructor(dbPath?: string) {
     // Create data directory if it doesn't exist
@@ -24,7 +25,11 @@ export class DatabaseService {
 
     this.dbPath = dbPath || join(dataDir, 'sessions.db');
     this.db = new Database.Database(this.dbPath);
-    this.initializeDatabase();
+    this.initializationPromise = this.initializeDatabase();
+  }
+
+  async waitForInitialization(): Promise<void> {
+    return this.initializationPromise;
   }
 
   private async initializeDatabase(): Promise<void> {

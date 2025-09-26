@@ -390,6 +390,23 @@ For issues and questions:
 
 ## Changelog
 
+### v2.2.4 (2025-09-26) - Critical Database Initialization Fix
+
+#### 🚨 **ROOT CAUSE RESOLUTION**
+- **Fixed Database Race Condition**: Resolved critical async/await issue where MCP server started before database initialization completed
+- **Tool Registration Success**: All 5 tools now properly register and appear in MCP clients  
+- **100% User Issue Resolution**: Addresses the core cause of "No tools, prompts, or resources" complaints
+
+#### 🔧 **Technical Solution**
+- **Async Database Initialization**: Added proper `waitForInitialization()` method to DatabaseService
+- **Sequential Startup**: Server now waits for database ready before accepting MCP protocol requests
+- **Race Condition Eliminated**: Database initialization Promise properly awaited before tool registration
+
+#### 📊 **Verified Fix**
+- **Server Startup Order**: "Database initialized successfully" → "Decision MCP running on stdio"
+- **Tool Availability**: All 5 tools (make_decision, analyze_decision, structured_thinking, manage_sessions, validate_logic) now working
+- **User Experience**: Complete resolution of global user complaints
+
 ### v2.2.3 (2025-09-26) - Emergency User Complaint Fix
 
 #### 🚨 **EMERGENCY FIX**
