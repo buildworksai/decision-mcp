@@ -1,5 +1,12 @@
 # Decision MCP by BuildWorks.AI
 
+[![npm version](https://badge.fury.io/js/buildworks-ai-decision-mcp.svg)](https://badge.fury.io/js/buildworks-ai-decision-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Actions](https://github.com/buildworksai/decision-mcp/workflows/Publish/badge.svg)](https://github.com/buildworksai/decision-mcp/actions)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![Downloads](https://img.shields.io/npm/dm/buildworks-ai-decision-mcp.svg)](https://www.npmjs.com/package/buildworks-ai-decision-mcp)
+
 Decision MCP by BuildWorks.AI is a production-grade Model Context Protocol (MCP) server providing sequential thinking, structured decision making, and decision analysis (bias, logic, risk). Works with Cursor, Windsurf, and Claude via stdio. Distributed via npm and Docker. Built and maintained by [BuildWorks.AI](https://buildworks.ai).
 
 ## Features
