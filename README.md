@@ -47,29 +47,24 @@ Decision MCP by BuildWorks.AI is a production-grade Model Context Protocol (MCP)
 
 ## Installation
 
-1. Install via npm (recommended):
+### Quick Start (Recommended)
+No installation required! Use `npx` to run the latest version:
+
+```bash
+npx buildworks-ai-decision-mcp
+```
+
+### Global Installation (Optional)
 ```bash
 npm install -g buildworks-ai-decision-mcp
 ```
 
-Or clone the repository:
+### Development Setup
 ```bash
-git clone <repository-url>
+git clone https://github.com/buildworksai/decision-mcp.git
 cd decision-mcp
-```
-
-2. Install dependencies:
-```bash
 npm install
-```
-
-3. Build the project:
-```bash
 npm run build
-```
-
-4. Run the server:
-```bash
 npm start
 ```
 
@@ -121,14 +116,16 @@ Add to your MCP settings:
 {
   "mcpServers": {
     "decision-mcp": {
-      "command": "decision-mcp",
-      "args": [],
+      "command": "npx",
+      "args": ["buildworks-ai-decision-mcp"],
       "env": {},
       "disabled": false
     }
   }
 }
 ```
+
+**Note**: Using `npx` ensures you always get the latest version and avoids global installation issues.
 
 ## Contributing and Conduct
 
