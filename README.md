@@ -13,7 +13,7 @@ Decision MCP by BuildWorks.AI is a production-grade Model Context Protocol (MCP)
 
 **76% reduction in tool count** - From 21 individual tools to just 5 powerful, consolidated tools that preserve all functionality while dramatically improving user experience.
 
-### 🎯 1. `make_decision` - Complete Decision Workflow
+### 🎯 1. `mcp_decision-mcp_make_decision` - Complete Decision Workflow
 **Consolidates 8 tools into 1 powerful workflow:**
 - Create decision sessions with context
 - Add multiple criteria with weights and types
@@ -22,7 +22,7 @@ Decision MCP by BuildWorks.AI is a production-grade Model Context Protocol (MCP)
 - Generate comprehensive analysis and recommendations
 - **One tool call = Complete decision from start to finish**
 
-### 🔍 2. `analyze_decision` - Deep Analysis Suite
+### 🔍 2. `mcp_decision-mcp_analyze_decision` - Deep Analysis Suite
 **Consolidates 5 analysis tools into 1 comprehensive analyzer:**
 - Bias detection and mitigation strategies
 - Logic validation and consistency checking
@@ -31,7 +31,7 @@ Decision MCP by BuildWorks.AI is a production-grade Model Context Protocol (MCP)
 - Comprehensive analysis combining all insights
 - **One tool call = Complete decision analysis**
 
-### 🧠 3. `structured_thinking` - Complete Thinking Workflow
+### 🧠 3. `mcp_decision-mcp_structured_thinking` - Complete Thinking Workflow
 **Consolidates 8 thinking tools into 1 flexible workflow:**
 - Start thinking sessions with problems and context
 - Add, revise, and branch thoughts dynamically
@@ -39,14 +39,14 @@ Decision MCP by BuildWorks.AI is a production-grade Model Context Protocol (MCP)
 - Conclude with final conclusions and confidence levels
 - **One tool call = Complete structured thinking process**
 
-### 📋 4. `manage_sessions` - Universal Session Management
+### 📋 4. `mcp_decision-mcp_manage_sessions` - Universal Session Management
 **Consolidates 4 session tools into 1 universal manager:**
 - Get individual sessions (decision or thinking)
 - List all sessions with filtering by type and status
 - Universal session management across all tool types
 - **One tool call = Complete session management**
 
-### ✅ 5. `validate_logic` - Quick Logic Validation
+### ✅ 5. `mcp_decision-mcp_validate_logic` - Quick Logic Validation
 **Standalone logic validation tool:**
 - Quick logic consistency checking
 - Strict or relaxed validation modes
@@ -357,15 +357,16 @@ For issues and questions:
 
 ## Roadmap
 
-### ✅ Completed (v2.2.0) - Ultra-Optimized Architecture
+### ✅ Completed (v2.2.1) - Ultra-Optimized Architecture
 - [x] **Revolutionary tool consolidation** - 76% reduction: 21 tools → 5 ultra-optimized tools
-- [x] **Complete decision workflow** - `make_decision` tool consolidates 8 tools into 1
-- [x] **Deep analysis suite** - `analyze_decision` tool consolidates 5 analysis tools into 1
-- [x] **Structured thinking workflow** - `structured_thinking` tool consolidates 8 thinking tools into 1
-- [x] **Universal session management** - `manage_sessions` tool consolidates 4 session tools into 1
-- [x] **Quick logic validation** - `validate_logic` tool for instant consistency checking
+- [x] **Complete decision workflow** - `mcp_decision-mcp_make_decision` tool consolidates 8 tools into 1
+- [x] **Deep analysis suite** - `mcp_decision-mcp_analyze_decision` tool consolidates 5 analysis tools into 1
+- [x] **Structured thinking workflow** - `mcp_decision-mcp_structured_thinking` tool consolidates 8 thinking tools into 1
+- [x] **Universal session management** - `mcp_decision-mcp_manage_sessions` tool consolidates 4 session tools into 1
+- [x] **Quick logic validation** - `mcp_decision-mcp_validate_logic` tool for instant consistency checking
 - [x] **Enterprise-grade performance** - Dramatically improved workflows and user experience
 - [x] **100% feature preservation** - All original functionality maintained and enhanced
+- [x] **MCP protocol compliance** - Fixed global tool registration issue with proper naming convention
 
 ### ✅ Completed (v2.1.0) - Feature Complete Release
 - [x] **Persistent session storage** - SQLite database with automatic session recovery

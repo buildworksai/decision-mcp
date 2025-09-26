@@ -70,12 +70,17 @@ jobs:
           CURRENT=$(node -p "require('./package.json').version")
           echo "Current version: ${CURRENT}"
           
-          # Try to publish to GitHub Packages, but don't fail the workflow if it doesn't work
-          if npm publish --loglevel=verbose 2>/dev/null; then
-            echo "✅ Successfully published to GitHub Packages"
+          # Check if we have proper permissions for GitHub Packages
+          if npm whoami --registry=https://npm.pkg.github.com 2>/dev/null; then
+            echo "✅ GitHub Packages authentication successful"
+            if npm publish --loglevel=verbose; then
+              echo "✅ Successfully published to GitHub Packages"
+            else
+              echo "⚠️ GitHub Packages publish failed (this is optional - main npm publish succeeded)"
+            fi
           else
-            echo "⚠️ GitHub Packages publish failed (this is optional - main npm publish succeeded)"
-            echo "Package is available on npm registry: https://www.npmjs.com/package/buildworks-ai-decision-mcp"
+            echo "⚠️ GitHub Packages authentication failed - skipping publish"
+            echo "This is optional. Package is available on npm registry: https://www.npmjs.com/package/buildworks-ai-decision-mcp"
           fi
 
       - name: Restore package.json
