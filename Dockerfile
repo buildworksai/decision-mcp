@@ -4,7 +4,7 @@ FROM node:18-alpine
 # Metadata labels
 LABEL org.opencontainers.image.title="Decision MCP by BuildWorks.AI"
 LABEL org.opencontainers.image.description="Sequential thinking, decision-making, and analysis server for MCP-compatible IDEs"
-LABEL org.opencontainers.image.version="2.1.0"
+LABEL org.opencontainers.image.version="2.4.0"
 LABEL org.opencontainers.image.vendor="BuildWorks.AI"
 LABEL org.opencontainers.image.url="https://buildworks.ai"
 LABEL org.opencontainers.image.source="https://github.com/buildworksai/decision-mcp"

@@ -66,7 +66,7 @@ export class ExternalDataService {
       url: 'https://api.openweathermap.org/data/2.5',
       type: 'rest',
       headers: {
-        'User-Agent': 'Decision-MCP/2.1.0'
+        'User-Agent': 'Decision-MCP/2.4.0'
       },
       timeout: 10000,
       cacheTtl: 600, // 10 minutes for weather data
@@ -80,7 +80,7 @@ export class ExternalDataService {
       url: 'https://newsapi.org/v2',
       type: 'rest',
       headers: {
-        'User-Agent': 'Decision-MCP/2.1.0'
+        'User-Agent': 'Decision-MCP/2.4.0'
       },
       timeout: 10000,
       cacheTtl: 300, // 5 minutes for news
@@ -94,7 +94,7 @@ export class ExternalDataService {
       url: 'https://www.alphavantage.co/query',
       type: 'rest',
       headers: {
-        'User-Agent': 'Decision-MCP/2.1.0'
+        'User-Agent': 'Decision-MCP/2.4.0'
       },
       timeout: 15000,
       cacheTtl: 900, // 15 minutes for financial data
@@ -156,7 +156,7 @@ export class ExternalDataService {
 
     // Prepare headers
     const headers: Record<string, string> = {
-      'User-Agent': 'Decision-MCP/2.1.0',
+      'User-Agent': 'Decision-MCP/2.4.0',
       'Accept': 'application/json',
       ...source.headers,
       ...validatedRequest.headers

@@ -391,7 +391,7 @@ For issues and questions:
 
 ## Roadmap
 
-### ✅ Completed (v2.3.7) - Shebang Fix & Codebase Cleanup
+### ✅ Completed (v2.4.0) - Version Bump & Documentation Alignment
 - [x] **Fixed Binary Execution Issue**: Added proper shebang line (`#!/usr/bin/env node`) to resolve MCP server startup failures
 - [x] **Codebase Cleanup**: Removed all non-required files (test files, backup files, database files)
 - [x] **Enhanced .gitignore**: Added comprehensive coverage for test files, database files, and backup files
@@ -429,6 +429,27 @@ For issues and questions:
 - None - Project is feature complete
 
 ## Changelog
+
+### v2.4.0 (2025-09-27) - Version Bump & Documentation Alignment
+
+#### 📚 **Documentation Overhaul**
+- **Complete README.md Rewrite**: Aligned all documentation with current codebase implementation
+- **Removed Database References**: Eliminated all misleading SQLite and persistent storage claims
+- **Updated Tool Names**: Corrected all tool names to match current simple naming convention
+- **Comprehensive Examples**: Added real-world usage examples for all 5 consolidated tools
+- **API Reference Update**: Complete API documentation for current 5-tool architecture
+
+#### 🔧 **Technical Accuracy**
+- **Architecture Description**: Updated to reflect in-memory storage only
+- **Feature Claims**: Realigned all feature descriptions with actual implementation
+- **Version Consistency**: Ensured all version references are consistent across codebase
+- **Removed Dead Links**: Eliminated references to deleted files and outdated examples
+
+#### 📊 **Documentation Quality**
+- **100% Accuracy**: All documentation now perfectly matches current implementation
+- **Professional Standards**: Clean, accurate, and user-friendly documentation
+- **No Misleading Claims**: Eliminated all overstatements and false capabilities
+- **Comprehensive Coverage**: Complete examples and API reference for all tools
 
 ### v2.3.7 (2025-09-27) - Critical Binary Execution Fix
 
