@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -7,14 +9,12 @@ import {
 import { DecisionMakerTool } from './tools/decision-maker.js';
 import { SequentialThinkingTool } from './tools/sequential-thinking.js';
 import { DecisionAnalyzerTool } from './tools/decision-analyzer.js';
-import { DatabaseService } from './services/database.js';
 import { CacheService } from './services/cache.js';
 import { PerformanceMonitor } from './services/performance.js';
 import { RateLimiter } from './services/rate-limiter.js';
 import { createSecurityMiddleware } from './services/security.js';
 
-// Global services
-const database = new DatabaseService();
+// Global services - simple in-memory approach
 const cache = new CacheService();
 const performanceMonitor = new PerformanceMonitor();
 const globalRateLimiter = new RateLimiter({
@@ -25,19 +25,20 @@ const security = createSecurityMiddleware();
 
 class DecisionMCPServer {
   private server: Server;
-  private decisionMaker: DecisionMakerTool;
-  private sequentialThinking: SequentialThinkingTool;
-  private decisionAnalyzer: DecisionAnalyzerTool;
+  private decisionMaker!: DecisionMakerTool;
+  private sequentialThinking!: SequentialThinkingTool;
+  private decisionAnalyzer!: DecisionAnalyzerTool;
   private security = security;
 
   constructor() {
     this.server = new Server(
       {
         name: 'Decision MCP by BuildWorks.AI',
-        version: '2.2.4',
+            version: '2.3.7',
       }
     );
 
+    // Initialize tools with simple in-memory storage
     this.decisionMaker = new DecisionMakerTool();
     this.sequentialThinking = new SequentialThinkingTool();
     this.decisionAnalyzer = new DecisionAnalyzerTool();
@@ -48,6 +49,7 @@ class DecisionMCPServer {
   private setupToolHandlers(): void {
     // List available tools - ULTRA-OPTIMIZED 5 TOOLS
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
+      console.error('DEBUG: ListToolsRequestSchema called');
       return {
         tools: [
           // 1. MAKE DECISION - Complete decision workflow
@@ -268,6 +270,7 @@ class DecisionMCPServer {
     // Handle tool calls
     this.server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
       const { name, arguments: args } = request.params;
+      console.error(`DEBUG: CallToolRequestSchema called with tool: ${name}`);
 
       try {
         switch (name) {
@@ -647,10 +650,6 @@ class DecisionMCPServer {
   }
 
   async run(): Promise<void> {
-    // Wait for database initialization before starting server
-    await database.waitForInitialization();
-    console.error('Database initialized successfully');
-    
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     console.error('Decision MCP by BuildWorks.AI — running on stdio');

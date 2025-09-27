@@ -94,3 +94,21 @@ public
 # Temporary folders
 tmp/
 temp/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# Test files
+test-*.js
+test-*.ts
+*-test.js
+*-test.ts
+test-output.log
+
+# Backup files
+*-fixed.ts
+*-backup.ts
+*-old.ts
